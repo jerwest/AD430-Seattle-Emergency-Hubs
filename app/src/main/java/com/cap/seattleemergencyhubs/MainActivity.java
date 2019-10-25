@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NHUBSActivity.class));
+                startActivity(new Intent(MainActivity.this, SelectedNeighborhoods.class));
             }
         });
 
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
     }
 
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
+            Intent defaultNeighborhoods = new Intent(this, SelectedNeighborhoods.class);
+            startActivity(defaultNeighborhoods);
 
         } else if (id == R.id.nav_resources) {
 

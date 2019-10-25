@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="26dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="26dp"
+    android:background="@android:color/background_light"
+    android:padding="12dip">
+
+    <TextView
+        android:id="@+id/patchName"
+        android:layout_width="378dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+
+        android:padding="3dp"
+        android:text="Patch Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <TextView
+
+        android:id="@+id/patchAdress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView"
+        android:layout_below="@+id/patchName"
+        android:layout_margin="5dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        android:padding="3dp"
+        android:text="Hub adress" />
+
+</RelativeLayout>

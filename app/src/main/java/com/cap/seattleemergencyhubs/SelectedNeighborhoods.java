@@ -1,21 +1,13 @@
 package com.cap.seattleemergencyhubs;
 import android.support.v7.app.ActionBar;
 
-import android.content.Intent;
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -31,7 +23,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
 
         // first part - map and neightborhood names
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.individual_neighborhood_activity);
+        setContentView(R.layout.selected_neighborhoods);
 
         Log.i(TAG, "started onCreate");
 

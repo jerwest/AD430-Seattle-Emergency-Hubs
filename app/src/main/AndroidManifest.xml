@@ -16,6 +16,7 @@
         <activity
             android:name=".SelectedNeighborhoods"
             android:label="@string/title_activity_nhubs"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"

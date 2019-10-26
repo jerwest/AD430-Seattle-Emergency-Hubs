@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                Intent trans = new Intent(MainActivity.this, NHUBSActivity.class);
+                Intent trans = new Intent(MainActivity.this, SelectedNeighborhoods.class);
                 trans.putExtra("transValue", nameTrans);
 
                 Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY" );
@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
     }
 
@@ -187,6 +188,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
+            Intent defaultNeighborhoods = new Intent(this, SelectedNeighborhoods.class);
+            startActivity(defaultNeighborhoods);
 
         } else if (id == R.id.nav_resources) {
 

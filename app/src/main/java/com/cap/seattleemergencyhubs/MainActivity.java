@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,11 +15,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Spinner spinner;
+    private ImageView image;
+    public String nameTrans;
+    public Log mmm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +38,93 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        //marquee
+        //MARQUEE...
         TextView txt = findViewById(R.id.text);
         txt.setSelected(true);
 
-        Button mButton = (Button) findViewById(R.id.buttonN);
+        //SPINNER...
+
+        spinner = findViewById(R.id.spinner);
+        image = findViewById(R.id.hubsmap);
+        String[] neighbor = {"Select","Ballards","Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,neighbor);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position){
+                    case 0:
+                        image.setImageResource(R.drawable.mainmap);
+                        nameTrans = "";
+                        break;
+                    case 1:
+                        image.setImageResource(R.drawable.ballardmap);
+                        nameTrans = "Ballards";
+                        break;
+                    case 2:
+                        image.setImageResource(R.drawable.capitolhillmap);
+                        nameTrans = "Capitol Hill";
+                        break;
+                    case 3:
+                        image.setImageResource(R.drawable.downtowncentralmap);
+                        nameTrans = "Downtown/Central";
+                        break;
+                    case 4:
+                        image.setImageResource(R.drawable.fremontmap);
+                        nameTrans = "Fremont";
+                        break;
+                    case 5:
+                        image.setImageResource(R.drawable.greenlakemap);
+                        nameTrans = "Green Lake";
+                        break;
+                    case 6:
+                        image.setImageResource(R.drawable.magnoliamap);
+                        nameTrans = "Magnolia";
+                        break;
+                    case 7:
+                        image.setImageResource(R.drawable.northwestmap);
+                        nameTrans = "Northwest Seattle";
+                        break;
+                    case 8:
+                        image.setImageResource(R.drawable.queenannmap);
+                        nameTrans = "Quee Ann";
+                        break;
+                    case 9:
+                        image.setImageResource(R.drawable.southseattlemap);
+                        nameTrans = "South Seattle";
+                        break;
+                    case 10:
+                        image.setImageResource(R.drawable.westseattlemap);
+                        nameTrans = "West Seattle";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        Button mButton = (Button) findViewById(R.id.buttonNeigh);
+
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NHUBSActivity.class));
+
+                Intent trans = new Intent(MainActivity.this, NHUBSActivity.class);
+                trans.putExtra("transValue", nameTrans);
+
+                Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY" );
+                Log.wtf("myTag", "888888888888888888888888888888" + nameTrans);
+
+                startActivity(trans);
+
             }
         });
 

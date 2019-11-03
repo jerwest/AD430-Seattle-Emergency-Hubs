@@ -187,8 +187,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
+            Intent intent = new Intent(MainActivity.this, NHUBSActivity.class);
+            startActivity(intent);
+
 
         } else if (id == R.id.nav_resources) {
+            Intent intent = new Intent(MainActivity.this, ResoursesActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_blog) {
 

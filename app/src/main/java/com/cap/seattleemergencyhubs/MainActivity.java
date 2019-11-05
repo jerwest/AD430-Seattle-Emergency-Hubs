@@ -10,6 +10,14 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.protobuf.MapEntryLite;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +30,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +42,10 @@ public class MainActivity extends AppCompatActivity
     private ImageView image;
     public String nameTrans;
     public Log mmm;
+    HashMap<String, ArrayList<Hub>> allHubs = new HashMap<>();
+    private static final String TAG = "Neighborhoods Activity";
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    final DatabaseReference myRef = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +54,46 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        // RETRIEVE DATA FOR ALL THE HUBS FROM THE FIREBASE
+        myRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
+                        allHubs.clear();
+
+                        while(hubIterator.hasNext()){
+                            DataSnapshot hoodSnapShot = hubIterator.next();
+                            Hub hub = hoodSnapShot.getValue(Hub.class);
+                            if(hub != null) {
+                                //TODO
+                                // write few unit tests to test if all the hubs get in the list
+                                if(!allHubs.containsKey(hub.getNeighborhood())){
+                                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
+                                    hubsInThisNeighborhood.add(hub);
+                                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
+                                } else {
+                                    allHubs.get(hub.getNeighborhood()).add(hub);
+                                }
+                            }
+                        }
+                        for(Map.Entry<String, ArrayList<Hub>> entry: allHubs.entrySet()){
+                            for(Hub hub: entry.getValue()) {
+                                Log.i(" *** Neighborhood " + hub.getNeighborhood() , "~~~ " + hub.getName());
+                            }
+                        }
+                        Log.i("List size", "" + allHubs.keySet().size());
+                        // finish();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        // setEditingEnabled(true);
+                        // [END_EXCLUDE]
+                    }
+                });
 
         //MARQUEE...
         TextView txt = findViewById(R.id.text);

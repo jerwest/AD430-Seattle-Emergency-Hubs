@@ -20,13 +20,23 @@ import com.google.protobuf.MapEntryLite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class SelectedNeighborhoods extends AppCompatActivity {
 
+    //TODO
+    // the below firebase data retriaval needs to be moved to the main activity as it needs to retrieve all the hubs
+    // when the user is on a main page after downloading
+    // in this activity - just build a list of hubs for the selected neighborhoods
+    // the main activity will have a HashMap < String neighborhood, ArrayList<Hub> someHubs> .
+    //TODO
+    // When the user selectes the neighborhood, the intent when being unpacked, the name of neighborhood in the
+    // intent has to select hub list value from the map of all neighborhoods.
+    // and only work with them in the SelectedNeighborhood Activity.
+
+
     /*
-
-
     Firebase provides great support when comes to offline data.
     It automatically stores the data offline when there is no internet connection.
     When the device connects to internet, all the data will be pushed to realtime database.
@@ -38,8 +48,6 @@ public class SelectedNeighborhoods extends AppCompatActivity {
 
      */
 
-
-
     ArrayList<Hub> hubs = new ArrayList<>(); // empty at the time
     HashMap<String, ArrayList<Hub>> greedwoodHubs = new HashMap<>();
     // up to 3 hubs that the user choose
@@ -47,49 +55,36 @@ public class SelectedNeighborhoods extends AppCompatActivity {
     private static final String TAG = "Neighborhoods Activity";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_neighborhoods);
-
         final DatabaseReference myRef = database.getReference();
         Log.i("Reference ", myRef.toString());
         Log.i(TAG, "started onCreate");
-
-
-
-
 
         myRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        // Get user value
-                        for (DataSnapshot hoodSnapShot : dataSnapshot.getChildren()) {
-                            //
-                        //for(DataSnapshot hoodSnapShot: dataSnapshot.getRef())
-                         //  Log.i("DATA SNAPSHOT ", dataSnapshot.getValue().toString());
-                           Hub hub = hoodSnapShot.getValue(Hub.class);
+                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
+                        hubs.clear();
 
-                           if(hub != null) {
-                              // if(hub.getNeighborhood().equals("Greenwood")) {
-                                   // works
-//                               Log.i(" Captain ", hub.getCaptain());
-//                               Log.i("Name ", hub.getName());
-//                               Log.i("Hub Description ", hub.getDescription());
-//                               Log.i("HUB email ", hub.getEmail());
-//                               Log.i("HUB type ", hub.getHub_type());
-//                               Log.i("HUB phone ", hub.getPhone());
-//                               Log.i("HUB state ", hub.getState());
-//                               Log.i("HUB city ", hub.getCity() + "\n");
-                                   hubs.add(hub);
-                               Log.i("List size", "" + hubs.size());
+                        while(hubIterator.hasNext()){
+                            DataSnapshot hoodSnapShot = hubIterator.next();
+
+                            Hub hub = hoodSnapShot.getValue(Hub.class);
+                            if(hub != null) {
+
                                    //TODO
                                    // write few unit tests to test if all the hubs get in the list
+                                hubs.add(hub);
                               // }
                            }
                     }
-                        finish();
+                        Log.i("List size", "" + hubs.size());
+                       // finish();
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -129,5 +124,55 @@ public class SelectedNeighborhoods extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+/*
+    public void populateLists(){
+        final DatabaseReference myRef = database.getReference();
+        myRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                        // Get user value
+                        for (DataSnapshot hoodSnapShot : dataSnapshot.getChildren()) {
+                            //
+                            //for(DataSnapshot hoodSnapShot: dataSnapshot.getRef())
+                            //  Log.i("DATA SNAPSHOT ", dataSnapshot.getValue().toString());
+                            Hub hub = hoodSnapShot.getValue(Hub.class);
+
+                            if(hub != null) {
+                                // if(hub.getNeighborhood().equals("Greenwood")) {
+                                // works
+                                Log.i(" Captain ", hub.getCaptain());
+                                Log.i("Name ", hub.getName());
+                                Log.i("Hub Description ", hub.getDescription());
+                                Log.i("HUB email ", hub.getEmail());
+                                Log.i("HUB type ", hub.getHub_type());
+                                Log.i("HUB phone ", hub.getPhone());
+                                Log.i("HUB state ", hub.getState());
+                                Log.i("HUB city ", hub.getCity() + "\n");
+                                hubs.add(hub);
+                                Log.i("List size", "" + hubs.size());
+                                //TODO
+                                // write few unit tests to test if all the hubs get in the list
+                                // }
+                            }
+                        }
+                        finish();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        // setEditingEnabled(true);
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+*/
+    @Override
+    public void onStart(){
+        super.onStart();
+        //populateLists();
+
     }
 }

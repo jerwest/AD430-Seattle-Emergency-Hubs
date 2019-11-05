@@ -48,13 +48,22 @@ public class MainActivity extends AppCompatActivity
     private ImageView image;
     public String nameTrans;
     public Log mmm;
-    HashMap<String, ArrayList<Hub>> allHubs = new HashMap<>();
+    private HashMap<String, ArrayList<Hub>> allHubs = new HashMap<>();
     private static final String TAG = "Neighborhoods Activity";
-    FirebaseDatabase database;
-
-
+    private FirebaseDatabase database;
     private DatabaseReference myRef;
 
+    /*
+    Firebase provides great support when comes to offline data.
+    It automatically stores the data offline when there is no internet connection.
+    When the device connects to internet, all the data will be pushed to realtime database.
+    However enabling disk persistence stores the data offline even though app restarts.
+    Disk persistence can be enabled by calling below one line code.
+    Here is complete guide about firebase offline capabilities.
+
+     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+
         // building hashmap of hubs from the firebase
         readHubs();
 
@@ -136,9 +146,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         Button mButton = (Button) findViewById(R.id.buttonNeigh);
-
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +154,7 @@ public class MainActivity extends AppCompatActivity
 
                 Intent trans = new Intent(MainActivity.this, SelectedNeighborhoods.class);
                 trans.putExtra("transValue", nameTrans);
+                startActivity(trans);
 
                 Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY");
                 Log.wtf("myTag", "888888888888888888888888888888" + nameTrans);
@@ -162,6 +171,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -172,9 +182,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void readHubs() {
-        database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
-        myRef = database.getReference();
+            database = FirebaseDatabase.getInstance();
+            myRef = database.getReference();
+
         // RETRIEVE DATA FOR ALL THE HUBS FROM THE FIREBASE
         myRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -265,6 +275,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_neighborhood) {
             Intent defaultNeighborhoods = new Intent(this, SelectedNeighborhoods.class);
+            defaultNeighborhoods.putExtra("transVal", nameTrans);
             startActivity(defaultNeighborhoods);
 
         } else if (id == R.id.nav_resources) {
@@ -278,5 +289,20 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 }

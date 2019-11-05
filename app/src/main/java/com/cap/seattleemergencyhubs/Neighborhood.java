@@ -17,6 +17,10 @@ public class Neighborhood {
         this.currentNeighborhoodHubs = neighborhoodHubs;
     }
 
+    public Neighborhood(){
+
+    }
+
     public String getName() {
         return name;
     }

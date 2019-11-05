@@ -37,8 +37,8 @@ public class HubsListAdapter extends ArrayAdapter<Hub> {
        TextView hubName = (TextView) convertView.findViewById(R.id.patchName);
        TextView hubAdress = (TextView) convertView.findViewById(R.id.patchAdress);
        // Populate the data into the template view using the data object
-        hubName.setText(hub.getHubName());
-        hubAdress.setText(hub.getApproxAdress());
+       // hubName.setText(hub.getHubName());
+       // hubAdress.setText(hub.getApproxAdress());
        // Return the completed view to render on screen
        return convertView;
    }

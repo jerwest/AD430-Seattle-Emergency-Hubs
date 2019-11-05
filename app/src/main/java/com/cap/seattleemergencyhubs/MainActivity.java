@@ -2,13 +2,18 @@ package com.cap.seattleemergencyhubs;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import android.util.Log;
 import android.view.View;
+
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+
 import android.view.MenuItem;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,8 +50,10 @@ public class MainActivity extends AppCompatActivity
     public Log mmm;
     HashMap<String, ArrayList<Hub>> allHubs = new HashMap<>();
     private static final String TAG = "Neighborhoods Activity";
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    final DatabaseReference myRef = database.getReference();
+    FirebaseDatabase database;
+
+
+    private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,46 +62,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-
-        // RETRIEVE DATA FOR ALL THE HUBS FROM THE FIREBASE
-        myRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
-                        allHubs.clear();
-
-                        while(hubIterator.hasNext()){
-                            DataSnapshot hoodSnapShot = hubIterator.next();
-                            Hub hub = hoodSnapShot.getValue(Hub.class);
-                            if(hub != null) {
-                                //TODO
-                                // write few unit tests to test if all the hubs get in the list
-                                if(!allHubs.containsKey(hub.getNeighborhood())){
-                                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
-                                    hubsInThisNeighborhood.add(hub);
-                                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
-                                } else {
-                                    allHubs.get(hub.getNeighborhood()).add(hub);
-                                }
-                            }
-                        }
-                        for(Map.Entry<String, ArrayList<Hub>> entry: allHubs.entrySet()){
-                            for(Hub hub: entry.getValue()) {
-                                Log.i(" *** Neighborhood " + hub.getNeighborhood() , "~~~ " + hub.getName());
-                            }
-                        }
-                        Log.i("List size", "" + allHubs.keySet().size());
-                        // finish();
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                        // setEditingEnabled(true);
-                        // [END_EXCLUDE]
-                    }
-                });
+        // building hashmap of hubs from the firebase
+        readHubs();
 
         //MARQUEE...
         TextView txt = findViewById(R.id.text);
@@ -103,23 +73,23 @@ public class MainActivity extends AppCompatActivity
 
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
-        String[] neighbor = {"Select","Ballards","Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
+        String[] neighbor = {"Select", "Ballards", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,neighbor);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                switch (position){
+                switch (position) {
                     case 0:
                         image.setImageResource(R.drawable.mainmap);
                         nameTrans = "";
                         break;
                     case 1:
                         image.setImageResource(R.drawable.ballardmap);
-                        nameTrans = "Ballards";
+                        nameTrans = "Ballard";
                         break;
                     case 2:
                         image.setImageResource(R.drawable.capitolhillmap);
@@ -177,7 +147,7 @@ public class MainActivity extends AppCompatActivity
                 Intent trans = new Intent(MainActivity.this, SelectedNeighborhoods.class);
                 trans.putExtra("transValue", nameTrans);
 
-                Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY" );
+                Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY");
                 Log.wtf("myTag", "888888888888888888888888888888" + nameTrans);
 
                 startActivity(trans);
@@ -199,6 +169,55 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void readHubs() {
+        database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true);
+        myRef = database.getReference();
+        // RETRIEVE DATA FOR ALL THE HUBS FROM THE FIREBASE
+        myRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
+                        allHubs.clear();
+
+                        while (hubIterator.hasNext()) {
+                            DataSnapshot hoodSnapShot = hubIterator.next();
+                            Hub hub = hoodSnapShot.getValue(Hub.class);
+                            if (hub != null) {
+                                //TODO
+                                // write few unit tests to test if all the hubs get in the list
+                                if (!allHubs.containsKey(hub.getNeighborhood())) {
+                                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
+                                    hubsInThisNeighborhood.add(hub);
+                                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
+                                } else {
+                                    if (allHubs.get(hub.getNeighborhood()) != null) {
+                                        allHubs.get(hub.getNeighborhood()).add(hub);
+                                    }
+                                }
+                            }
+                        }
+                        // TESTING MAP CONTENTS - NEEDS TO BE SWITCHED TO THE UNIT TEST
+                        for (Map.Entry<String, ArrayList<Hub>> entry : allHubs.entrySet()) {
+                            for (Hub hub : entry.getValue()) {
+                                Log.i(" *** Neighborhood " + hub.getNeighborhood(), "~~~ " + hub.getName());
+                            }
+                        }
+                        Log.i("List size", "" + allHubs.keySet().size());
+                        // finish();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        // setEditingEnabled(true);
+                        // [END_EXCLUDE]
+                    }
+                });
     }
 
     @Override

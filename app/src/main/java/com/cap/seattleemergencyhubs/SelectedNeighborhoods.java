@@ -60,41 +60,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_neighborhoods);
-        final DatabaseReference myRef = database.getReference();
-        Log.i("Reference ", myRef.toString());
         Log.i(TAG, "started onCreate");
-
-        myRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
-                        hubs.clear();
-
-                        while(hubIterator.hasNext()){
-                            DataSnapshot hoodSnapShot = hubIterator.next();
-
-                            Hub hub = hoodSnapShot.getValue(Hub.class);
-                            if(hub != null) {
-
-                                   //TODO
-                                   // write few unit tests to test if all the hubs get in the list
-                                hubs.add(hub);
-                              // }
-                           }
-                    }
-                        Log.i("List size", "" + hubs.size());
-                       // finish();
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                       // setEditingEnabled(true);
-                        // [END_EXCLUDE]
-                    }
-                });
-
 
 
 //        for(Hub hub: hubs){
@@ -109,7 +75,6 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         Button secondNeighborhood = (Button) findViewById(R.id.second_neighborhood);
         Button thirdNeighborhood = (Button) findViewById(R.id.third_neighborhood);
         FrameLayout editButton = (FrameLayout) findViewById(R.id.Add_edit_button);
-        ImageView map = findViewById(R.id.neighborhood_map);
         // second part - a list view of hubs
         HubsListAdapter adapter = new HubsListAdapter(this, hubs);
 
@@ -125,50 +90,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
     }
-/*
-    public void populateLists(){
-        final DatabaseReference myRef = database.getReference();
-        myRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        // Get user value
-                        for (DataSnapshot hoodSnapShot : dataSnapshot.getChildren()) {
-                            //
-                            //for(DataSnapshot hoodSnapShot: dataSnapshot.getRef())
-                            //  Log.i("DATA SNAPSHOT ", dataSnapshot.getValue().toString());
-                            Hub hub = hoodSnapShot.getValue(Hub.class);
 
-                            if(hub != null) {
-                                // if(hub.getNeighborhood().equals("Greenwood")) {
-                                // works
-                                Log.i(" Captain ", hub.getCaptain());
-                                Log.i("Name ", hub.getName());
-                                Log.i("Hub Description ", hub.getDescription());
-                                Log.i("HUB email ", hub.getEmail());
-                                Log.i("HUB type ", hub.getHub_type());
-                                Log.i("HUB phone ", hub.getPhone());
-                                Log.i("HUB state ", hub.getState());
-                                Log.i("HUB city ", hub.getCity() + "\n");
-                                hubs.add(hub);
-                                Log.i("List size", "" + hubs.size());
-                                //TODO
-                                // write few unit tests to test if all the hubs get in the list
-                                // }
-                            }
-                        }
-                        finish();
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                        // setEditingEnabled(true);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-*/
     @Override
     public void onStart(){
         super.onStart();

@@ -188,10 +188,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
+
             Intent defaultNeighborhoods = new Intent(this, SelectedNeighborhoods.class);
             startActivity(defaultNeighborhoods);
-
         } else if (id == R.id.nav_resources) {
+            Intent intent = new Intent(MainActivity.this, ResoursesActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_blog) {
 

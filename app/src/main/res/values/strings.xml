@@ -14,4 +14,6 @@
     <string name="menu_share">Blog</string>
     <string name="menu_send">Contact</string>
     <string name="title_activity_nhubs">Neighborhood Hubs</string>
+    <string name="title_activity_resourses">Seattle Emergency Hubs</string>
+    <string name="title_activity_view">ViewActivity</string>
 </resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.cap.seattleemergencyhubs.ResourseActivity"
+    tools:showIn="@layout/activity_resourse">
+
+    <Button
+        android:id="@+id/planningBtn"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="25dp"
+        android:text="Planning Tips"
+        android:onClick="buttonOnClick"
+        app:layout_constraintBottom_toTopOf="@+id/createHubBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/urbSurvBtn" />
+
+    <Button
+        android:id="@+id/createHubBtn"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="25dp"
+        android:text="How To Create a Hub"
+        android:onClick="buttonOnClick"
+        app:layout_constraintBottom_toTopOf="@+id/firstAidBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/planningBtn" />
+
+    <Button
+        android:id="@+id/firstAidBtn"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="25dp"
+        android:text="Medical and First Aid"
+        android:onClick="buttonOnClick"
+        app:layout_constraintBottom_toTopOf="@+id/safetyBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createHubBtn" />
+
+    <Button
+        android:id="@+id/safetyBtn"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="25dp"
+        android:text="Safety Tips"
+        android:onClick="buttonOnClick"
+        app:layout_constraintBottom_toTopOf="@+id/trainningBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstAidBtn" />
+
+    <Button
+        android:id="@+id/trainningBtn"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="25dp"
+        android:text="Trainning and Education"
+        android:onClick="buttonOnClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/safetyBtn" />
+
+    <Button
+        android:id="@+id/urbSurvBtn"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="25dp"
+        android:text="Urban Survival Skills"
+        android:onClick="buttonOnClick"
+        app:layout_constraintBottom_toTopOf="@+id/planningBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textResSkills" />
+
+    <TextView
+        android:id="@+id/textResSkills"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:text="RESOURCES SKILLS"
+        app:layout_constraintBottom_toTopOf="@+id/urbSurvBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
 
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
-        String[] neighbor = {"Select", "Ballards", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
+        String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
 
@@ -275,9 +275,12 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_neighborhood) {
 
-            Intent defaultNeighborhoods = new Intent(this, SelectedNeighborhoods.class);
-            defaultNeighborhoods.putExtra("transVal", nameTrans);
-            startActivity(defaultNeighborhoods);
+            Intent intent = new Intent(this, SelectedNeighborhoods.class);
+            //intent.putExtra("transVal", nameTrans);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
+            intent.putExtras(bundle);
+            startActivity(intent);
         } else if (id == R.id.nav_resources) {
             Intent intent = new Intent(MainActivity.this, ResoursesActivity.class);
             startActivity(intent);

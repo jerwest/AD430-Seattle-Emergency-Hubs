@@ -1,6 +1,6 @@
 package com.cap.seattleemergencyhubs;
 
-public class Hub {
+public class Hub implements  java.io.Serializable {
     //private HubCaptain captain;
     private String city;
     private String captain;

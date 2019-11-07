@@ -16,7 +16,7 @@ public class Neighborhood {
         this.mapImagePath = mapImagePath;
         this.currentNeighborhoodHubs = neighborhoodHubs;
     }
-
+    //do not remove this constructor - needed for Firebase database data read
     public Neighborhood(){
 
     }

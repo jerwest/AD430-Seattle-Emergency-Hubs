@@ -1,38 +1,29 @@
 package com.cap.seattleemergencyhubs;
 import androidx.appcompat.app.ActionBar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SelectedNeighborhoods extends AppCompatActivity {
 
-    //TODO
-    // the below firebase data retriaval needs to be moved to the main activity as it needs to retrieve all the hubs
-    // when the user is on a main page after downloading
-    // in this activity - just build a list of hubs for the selected neighborhoods
-    // the main activity will have a HashMap < String neighborhood, ArrayList<Hub> someHubs> .
-    //TODO
-    // When the user selectes the neighborhood, the intent when being unpacked, the name of neighborhood in the
-    // intent has to select hub list value from the map of all neighborhoods.
-    // and only work with them in the SelectedNeighborhood Activity.
-
-    ArrayList<Hub> hubs = new ArrayList<>(); // empty at the time
-    ArrayList<Hub> choosenDefaults;
+    private ArrayList<Hub> currentNeighborhoodHubs = new ArrayList<>(); // empty at the time
     private static final String TAG = "Neighborhoods Activity";
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +32,24 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         Log.i(TAG, "started onCreate");
         Intent intent = getIntent();
         Bundle bundle = getIntent().getExtras();
-        //pulling elements values from key on Bundle
-        // get the passed from main activity selected neighborhood name
-        String neighborhoodName = "";
-
-        if(bundle != null) {
-            neighborhoodName = bundle.getString("transVal");
-            if(neighborhoodName!=null) {
-                Log.i(" *** Intent trans hood ", neighborhoodName);
+        if (bundle != null) {
+            currentNeighborhoodHubs = (ArrayList<Hub>) bundle.getSerializable("neighborhoodName");
+            if (currentNeighborhoodHubs != null) {
+                Log.i(" *** Current hubs list ", currentNeighborhoodHubs.get(0).getName());
             }
         }
 
         ImageView imageView = findViewById(R.id.neighborhood_map);
 
+
         Button firstNeighborhood = (Button) findViewById(R.id.first_neighborhood);
         Button secondNeighborhood = (Button) findViewById(R.id.second_neighborhood);
         Button thirdNeighborhood = (Button) findViewById(R.id.third_neighborhood);
         FrameLayout editButton = (FrameLayout) findViewById(R.id.Add_edit_button);
+
+
+
         // second part - a list view of hubs
-        HubsListAdapter adapter = new HubsListAdapter(this, hubs);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,20 +57,31 @@ public class SelectedNeighborhoods extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+
+        HubsListAdapter adapter = new HubsListAdapter(this, currentNeighborhoodHubs);
+        final ListView listView = (ListView) findViewById(R.id.hubs_list);
+        listView.setAdapter(adapter);
+
+
+
+
     }
 
+
+
+
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
 }

@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity
             intent.putExtras(bundle);
             startActivity(intent);
         } else if (id == R.id.nav_resources) {
-            Intent intent = new Intent(MainActivity.this, ResoursesActivity.class);
+            Intent intent = new Intent(MainActivity.this, ResourseActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_blog) {

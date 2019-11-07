@@ -4,6 +4,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -33,7 +35,9 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+
             currentNeighborhoodHubs = (ArrayList<Hub>) bundle.getSerializable("neighborhoodName");
+            Log.i("ArrayList ", currentNeighborhoodHubs.toArray().toString() );
             if (currentNeighborhoodHubs != null) {
                 firstSelectedNeighbName = currentNeighborhoodHubs.get(0).getNeighborhood().toUpperCase();
                 Log.i(" *** Current hubs list ", firstSelectedNeighbName);
@@ -46,6 +50,8 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         firstNeighborhood.setText(firstSelectedNeighbName);
         Button secondNeighborhood = (Button) findViewById(R.id.second_neighborhood);
         Button thirdNeighborhood = (Button) findViewById(R.id.third_neighborhood);
+//        thirdNeighborhood.setVisibility(View.GONE);
+//        secondNeighborhood.setVisibility(View.GONE);
         // add and change neighborhoods button
         FrameLayout editButton = (FrameLayout) findViewById(R.id.Add_edit_button);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +77,11 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.hubs_list);
         //TODO
         // handle if nothing is selected from the neighborhood
+
         listView.setAdapter(adapter);
+        ColorDrawable separator = new ColorDrawable(this.getResources().getColor(R.color.lightGreen));
+        listView.setDivider(separator);
+        listView.setDividerHeight(10);
 
     }
 

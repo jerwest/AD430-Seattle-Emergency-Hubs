@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
 
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
-        String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
+        String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
 
@@ -136,6 +136,9 @@ public class MainActivity extends AppCompatActivity
                     case 10:
                         image.setImageResource(R.drawable.westseattlemap);
                         nameTrans = "West Seattle";
+                        break;
+                    case 11:
+                        nameTrans = "Crown Hill";
                         break;
                 }
             }
@@ -279,6 +282,13 @@ public class MainActivity extends AppCompatActivity
             //intent.putExtra("transVal", nameTrans);
             Bundle bundle = new Bundle();
             bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
+
+            Log.i("** name Trans ", nameTrans);
+            ArrayList<Hub> crownHillHubs = allHubs.get(nameTrans);
+            for(int i = 0; i< crownHillHubs.size(); i++){
+                Log.i(" %%% CH test hubs ", crownHillHubs.get(0).getName());
+            }
+
             intent.putExtras(bundle);
             startActivity(intent);
         } else if (id == R.id.nav_resources) {

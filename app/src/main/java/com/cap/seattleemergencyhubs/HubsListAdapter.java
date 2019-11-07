@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+
 import java.util.ArrayList;
 
 public class HubsListAdapter extends ArrayAdapter<Hub> {
@@ -23,22 +25,42 @@ public class HubsListAdapter extends ArrayAdapter<Hub> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hub_row_item_view, parent, false);
         }
 
-
-
-        //ImageView imageView = findViewById(R.id.movieImage);
-        //String url = "movies"
         Hub hub = getItem(position);
         String neighborhoodName = "";
-        String neighborhoodLocation = "";
+        String hName = "";
+        String hubLocation = "";
+        String hubCaptainName = "";
+        String hEmail = "";
+        String hPhone = "";
+
         if(hub != null) {
             neighborhoodName = hub.getNeighborhood();
-            neighborhoodLocation = hub.getHub_location();
+            hName = hub.getName();
+            hubLocation = hub.getHub_location();
+            hubCaptainName = hub.getCaptain();
+            hEmail = hub.getEmail();
+            hPhone = hub.getPhone();
         }
-
         TextView hubName = (TextView) convertView.findViewById(R.id.hub_name);
         TextView hubAddress = (TextView) convertView.findViewById(R.id.hub_adress);
-        hubName.setText(neighborhoodName);
-        hubAddress.setText(neighborhoodLocation);
+        TextView hubCaptain = (TextView) convertView.findViewById(R.id.hub_captain);
+        TextView hubEmail = (TextView) convertView.findViewById(R.id.hub_email);
+        TextView hubPhone = (TextView) convertView.findViewById(R.id.hub_phone);
+
+        TextView[] fields = {hubName, hubAddress,hubCaptain, hubEmail, hubPhone };
+        hubName.setText(hName);
+        hubAddress.setText(hubLocation);
+        hubCaptain.setText(hubCaptainName);
+        hubEmail.setText(hEmail);
+        hubPhone.setText(hPhone);
+        // hide the empty space in the list if the hub doesn't have some info
+        for(TextView field: fields){
+            if(field.length() <1){
+                field.setVisibility(View.GONE);
+            }
+        }
+
+
 
         return convertView;
     }

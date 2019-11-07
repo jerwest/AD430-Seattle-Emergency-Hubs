@@ -182,8 +182,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void readHubs() {
-            database = FirebaseDatabase.getInstance();
-            myRef = database.getReference();
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
 
         // RETRIEVE DATA FOR ALL THE HUBS FROM THE FIREBASE
         myRef.addListenerForSingleValueEvent(
@@ -297,17 +297,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
+        Log.i("Main activity", "started");
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
+        Log.i("Main activity", "passed");
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
+        Log.i("Main activity", "resumed");
     }
 }

@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity
             defaultNeighborhoods.putExtra("transVal", nameTrans);
             startActivity(defaultNeighborhoods);
         } else if (id == R.id.nav_resources) {
-            Intent intent = new Intent(MainActivity.this, ResoursesActivity.class);
+            Intent intent = new Intent(MainActivity.this, ResourseActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_blog) {

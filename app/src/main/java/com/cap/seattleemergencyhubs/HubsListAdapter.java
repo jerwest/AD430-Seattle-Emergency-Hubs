@@ -1,18 +1,13 @@
 package com.cap.seattleemergencyhubs;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 
@@ -24,51 +19,50 @@ public class HubsListAdapter extends ArrayAdapter<Hub> {
         super(context, 0, hubs);
     }
 
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-       // Get the data item for this position
-       Hub hub = getItem(position);
-       // Check if an existing view is being reused, otherwise inflate the view
-       if (convertView == null) {
-          convertView = LayoutInflater.from(getContext()).inflate(R.layout.hub_row_item_view, parent, false);
-       }
-       // Lookup view for data population
-       TextView hubName = (TextView) convertView.findViewById(R.id.patchName);
-       TextView hubAdress = (TextView) convertView.findViewById(R.id.patchAdress);
-       // Populate the data into the template view using the data object
-       // hubName.setText(hub.getHubName());
-       // hubAdress.setText(hub.getApproxAdress());
-       // Return the completed view to render on screen
-       return convertView;
-   }
-
-
-
-
-/*
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_list_row_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.hub_row_item_view, parent, false);
         }
-        //ImageView imageView = findViewById(R.id.movieImage);
-        //String url = "movies"
 
-        String[] movie = getItem(position);
-        TextView movieTitle = (TextView) convertView.findViewById(R.id.movieTitle);
-        movieTitle.setText(movie[0]);
+        Hub hub = getItem(position);
+        String neighborhoodName = "";
+        String hName = "";
+        String hubLocation = "";
+        String hubCaptainName = "";
+        String hEmail = "";
+        String hPhone = "";
 
-        TextView movieYear = (TextView) convertView.findViewById(R.id.movieYear);
-        movieYear.setText(movie[1]);
+        if(hub != null) {
+            neighborhoodName = hub.getNeighborhood();
+            hName = hub.getName();
+            hubLocation = hub.getHub_location();
+            hubCaptainName = hub.getCaptain();
+            hEmail = hub.getEmail();
+            hPhone = hub.getPhone();
+        }
+        TextView hubName = (TextView) convertView.findViewById(R.id.hub_name);
+        TextView hubAddress = (TextView) convertView.findViewById(R.id.hub_adress);
+        TextView hubCaptain = (TextView) convertView.findViewById(R.id.hub_captain);
+        TextView hubEmail = (TextView) convertView.findViewById(R.id.hub_email);
+        TextView hubPhone = (TextView) convertView.findViewById(R.id.hub_phone);
 
-        ImageView movieImage = convertView.findViewById(R.id.movieImage);
-        String url = (movie[3]);
+        TextView[] fields = {hubName, hubAddress,hubCaptain, hubEmail, hubPhone };
+        hubName.setText(hName);
+        hubAddress.setText(hubLocation);
+        hubCaptain.setText(hubCaptainName);
+        hubEmail.setText(hEmail);
+        hubPhone.setText(hPhone);
+        // hide the empty space in the list if the hub doesn't have some info
+        for(TextView field: fields){
+            if(field.length() <1){
+                field.setVisibility(View.GONE);
+            }
+        }
 
-        Picasso.get().load(url).into(movieImage);
+
 
         return convertView;
     }
 
-*/
 }

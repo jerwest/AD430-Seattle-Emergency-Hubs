@@ -4,37 +4,106 @@
     android:layout_marginLeft="26dp"
     android:layout_marginTop="5dp"
     android:layout_marginRight="26dp"
-    android:background="@android:color/background_light"
-    android:padding="12dip">
+    android:padding="2dip">
 
     <TextView
-        android:id="@+id/patchName"
-        android:layout_width="378dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/hub_name"
+        android:layout_width="330dp"
+        android:layout_height="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="3dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="3dp"
         android:layout_marginBottom="5dp"
-
-        android:padding="3dp"
-        android:text="Patch Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textColor="@android:color/background_light"
+        android:textStyle="bold"
+        android:text="Patch Name" />
 
     <TextView
 
-        android:id="@+id/patchAdress"
+        android:id="@+id/hub_adress"
+        android:layout_width="328dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView"
+        android:layout_below="@+id/hub_name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="1"
+        android:textColor="@android:color/background_light"
+        android:textStyle="bold"
+        android:text="37th Ave SE and 1st Ave" />
+
+    <TextView
+
+        android:id="@+id/hub_captain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView"
-        android:layout_below="@+id/patchName"
-        android:layout_margin="5dp"
+        android:layout_below="@+id/hub_adress"
+        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_toStartOf="@+id/hub_email"
+        android:layout_weight="1"
+        android:text="Captain Underpants"
+        android:textStyle="bold"
+        android:textColor="@android:color/background_light"/>
+
+    <TextView
+
+        android:id="@+id/hub_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView"
+        android:layout_below="@+id/hub_adress"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
         android:layout_marginHorizontal="10dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="3dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:layout_weight="1"
-        android:padding="3dp"
-        android:text="Hub adress" />
+        android:text="captainsemail@gmail.com"
+        android:textStyle="bold"
+        android:textColor="@android:color/background_light"/>
+
+    <TextView
+
+        android:id="@+id/hub_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView"
+        android:layout_below="@+id/hub_email"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        android:text="222-222-222"
+        android:textStyle="bold"
+
+        android:textColor="@android:color/background_light"/>
 
 </RelativeLayout>

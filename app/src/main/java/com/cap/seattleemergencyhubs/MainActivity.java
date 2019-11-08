@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
 
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
-        String[] neighbor = {"Select", "Ballards", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle"};
+        String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
 
@@ -137,6 +137,9 @@ public class MainActivity extends AppCompatActivity
                         image.setImageResource(R.drawable.westseattlemap);
                         nameTrans = "West Seattle";
                         break;
+                    case 11:
+                        nameTrans = "Crown Hill";
+                        break;
                 }
             }
 
@@ -182,8 +185,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void readHubs() {
-            database = FirebaseDatabase.getInstance();
-            myRef = database.getReference();
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
 
         // RETRIEVE DATA FOR ALL THE HUBS FROM THE FIREBASE
         myRef.addListenerForSingleValueEvent(
@@ -275,9 +278,19 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_neighborhood) {
 
-            Intent defaultNeighborhoods = new Intent(this, SelectedNeighborhoods.class);
-            defaultNeighborhoods.putExtra("transVal", nameTrans);
-            startActivity(defaultNeighborhoods);
+            Intent intent = new Intent(this, SelectedNeighborhoods.class);
+            //intent.putExtra("transVal", nameTrans);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
+
+            Log.i("** name Trans ", nameTrans);
+            ArrayList<Hub> crownHillHubs = allHubs.get(nameTrans);
+            for(int i = 0; i< crownHillHubs.size(); i++){
+                Log.i(" %%% CH test hubs ", crownHillHubs.get(0).getName());
+            }
+
+            intent.putExtras(bundle);
+            startActivity(intent);
         } else if (id == R.id.nav_resources) {
             Intent intent = new Intent(MainActivity.this, ResourseActivity.class);
             startActivity(intent);
@@ -294,17 +307,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
+        Log.i("Main activity", "started");
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
+        Log.i("Main activity", "passed");
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
+        Log.i("Main activity", "resumed");
     }
 }

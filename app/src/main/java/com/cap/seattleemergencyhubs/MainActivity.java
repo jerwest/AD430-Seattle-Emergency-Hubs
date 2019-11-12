@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,10 +49,11 @@ public class MainActivity extends AppCompatActivity
     private ImageView image;
     public String nameTrans;
     public Log mmm;
-    private HashMap<String, ArrayList<Hub>> allHubs = new HashMap<>();
+    private HashMap<String, ArrayList<Hub>> allHubs;
     private static final String TAG = "Neighborhoods Activity";
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    String[] neighborAsync;
 
     /*
     Firebase provides great support when comes to offline data.
@@ -71,84 +73,21 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+        allHubs = new HashMap<>();
 
         // building hashmap of hubs from the firebase
+        Log.i("****** AllHubs", allHubs.toString());
         readHubs();
-
+        Log.i("****** AllHubs", allHubs.toString());
         //MARQUEE...
         TextView txt = findViewById(R.id.text);
         txt.setSelected(true);
-
         //SPINNER...
-
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
         String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
-
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                switch (position) {
-                    case 0:
-                        image.setImageResource(R.drawable.mainmap);
-                        nameTrans = "";
-                        break;
-                    case 1:
-                        image.setImageResource(R.drawable.ballardmap);
-                        nameTrans = "Ballard";
-                        break;
-                    case 2:
-                        image.setImageResource(R.drawable.capitolhillmap);
-                        nameTrans = "Capitol Hill";
-                        break;
-                    case 3:
-                        image.setImageResource(R.drawable.downtowncentralmap);
-                        nameTrans = "Downtown/Central";
-                        break;
-                    case 4:
-                        image.setImageResource(R.drawable.fremontmap);
-                        nameTrans = "Fremont";
-                        break;
-                    case 5:
-                        image.setImageResource(R.drawable.greenlakemap);
-                        nameTrans = "Green Lake";
-                        break;
-                    case 6:
-                        image.setImageResource(R.drawable.magnoliamap);
-                        nameTrans = "Magnolia";
-                        break;
-                    case 7:
-                        image.setImageResource(R.drawable.northwestmap);
-                        nameTrans = "Northwest Seattle";
-                        break;
-                    case 8:
-                        image.setImageResource(R.drawable.queenannmap);
-                        nameTrans = "Quee Ann";
-                        break;
-                    case 9:
-                        image.setImageResource(R.drawable.southseattlemap);
-                        nameTrans = "South Seattle";
-                        break;
-                    case 10:
-                        image.setImageResource(R.drawable.westseattlemap);
-                        nameTrans = "West Seattle";
-                        break;
-                    case 11:
-                        nameTrans = "Crown Hill";
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
         Button mButton = (Button) findViewById(R.id.buttonNeigh);
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -184,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void readHubs() {
+    public Set<String> readHubs() {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -221,6 +160,28 @@ public class MainActivity extends AppCompatActivity
                         }
                         Log.i("List size", "" + allHubs.keySet().size());
                         // finish();
+                        // update the list of spinner
+                        int i = 0;
+                        neighborAsync = new String[allHubs.keySet().size()];
+                        for (String name : allHubs.keySet()) {
+                            neighborAsync[i++] = name;
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, neighborAsync);
+
+
+                        spinner.setAdapter(adapter);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                nameTrans = spinner.getSelectedItem().toString();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -231,6 +192,8 @@ public class MainActivity extends AppCompatActivity
                         // [END_EXCLUDE]
                     }
                 });
+        Log.i("****** AllHubs", allHubs.toString());
+        return allHubs.keySet();
     }
 
     @Override
@@ -277,6 +240,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
+            Log.i("((((((())))))) Keyset", "" + allHubs.keySet());
 
             Intent intent = new Intent(this, SelectedNeighborhoods.class);
             //intent.putExtra("transVal", nameTrans);
@@ -284,9 +248,9 @@ public class MainActivity extends AppCompatActivity
             bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
 
             Log.i("** name Trans ", nameTrans);
-            ArrayList<Hub> crownHillHubs = allHubs.get(nameTrans);
-            for(int i = 0; i< crownHillHubs.size(); i++){
-                Log.i(" %%% CH test hubs ", crownHillHubs.get(0).getName());
+            ArrayList<Hub> sampleHubs = allHubs.get(nameTrans);
+            for (int i = 0; i < sampleHubs.size(); i++) {
+                Log.i(" %%% CH test hubs ", sampleHubs.get(i).getName());
             }
 
             intent.putExtras(bundle);
@@ -315,7 +279,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("Main activity", "passed");
+        Log.i("Main activity", "paused");
     }
 
     @Override

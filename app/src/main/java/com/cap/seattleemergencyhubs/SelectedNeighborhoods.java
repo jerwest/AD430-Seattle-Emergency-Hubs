@@ -5,19 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
 
@@ -38,7 +36,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         if (bundle != null) {
 
             currentNeighborhoodHubs = (ArrayList<Hub>) bundle.getSerializable("neighborhoodName");
-            Log.i("ArrayList ", currentNeighborhoodHubs.toArray().toString() );
+            Log.i("ArrayList ", currentNeighborhoodHubs.toArray().toString());
             if (currentNeighborhoodHubs != null) {
                 firstSelectedNeighbName = currentNeighborhoodHubs.get(0).getNeighborhood().toUpperCase();
                 Log.i(" *** Current hubs list ", firstSelectedNeighbName);
@@ -62,9 +60,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SelectedNeighborhoods.this, MainActivity.class);
-                //TODO
-                //put the currently selected neigborhood into the intent
-                // when moving to the previouse activity - keep it's name in the selection
+
                 startActivity(intent);
             }
         });

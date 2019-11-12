@@ -1,6 +1,7 @@
 package com.cap.seattleemergencyhubs;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
-import com.google.protobuf.MapEntryLite;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -35,12 +35,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,41 +55,33 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "Neighborhoods Activity";
     private FirebaseDatabase database;
     private DatabaseReference myRef;
-    String[] neighborAsync;
+    private String[] neighborAsync;
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.cap.seattleemergencyhubs";
+    private SharedPreferences lastSelection;
+    private String SELECTED_NAME = "selected_neighborhood";
+    private boolean initialDisplay = true;
+    int selectedPosition;
 
-    /*
-    Firebase provides great support when comes to offline data.
-    It automatically stores the data offline when there is no internet connection.
-    When the device connects to internet, all the data will be pushed to realtime database.
-    However enabling disk persistence stores the data offline even though app restarts.
-    Disk persistence can be enabled by calling below one line code.
-    Here is complete guide about firebase offline capabilities.
-
-     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         allHubs = new HashMap<>();
-
-        // building hashmap of hubs from the firebase
-        Log.i("****** AllHubs", allHubs.toString());
         readHubs();
-        Log.i("****** AllHubs", allHubs.toString());
         //MARQUEE...
         TextView txt = findViewById(R.id.text);
         txt.setSelected(true);
         //SPINNER...
+
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
-        String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
-
-        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
+        image.setImageResource(R.drawable.mainmap);
+        //String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
         Button mButton = (Button) findViewById(R.id.buttonNeigh);
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -132,34 +126,13 @@ public class MainActivity extends AppCompatActivity
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
-                        allHubs.clear();
+                        //spinner.setSelection(mPreferences.getInt("spinnerSelection",0));
 
-                        while (hubIterator.hasNext()) {
-                            DataSnapshot hoodSnapShot = hubIterator.next();
-                            Hub hub = hoodSnapShot.getValue(Hub.class);
-                            if (hub != null) {
-                                //TODO
-                                // write few unit tests to test if all the hubs get in the list
-                                if (!allHubs.containsKey(hub.getNeighborhood())) {
-                                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
-                                    hubsInThisNeighborhood.add(hub);
-                                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
-                                } else {
-                                    if (allHubs.get(hub.getNeighborhood()) != null) {
-                                        allHubs.get(hub.getNeighborhood()).add(hub);
-                                    }
-                                }
-                            }
+                        if (!initialDisplay) {
+                            spinner.setSelection(selectedPosition);
                         }
-                        // TESTING MAP CONTENTS - NEEDS TO BE SWITCHED TO THE UNIT TEST
-                        for (Map.Entry<String, ArrayList<Hub>> entry : allHubs.entrySet()) {
-                            for (Hub hub : entry.getValue()) {
-                                Log.i(" *** Neighborhood " + hub.getNeighborhood(), "~~~ " + hub.getName());
-                            }
-                        }
-                        Log.i("List size", "" + allHubs.keySet().size());
-                        // finish();
+                        buildAllHubs(dataSnapshot);
+                        logTheNeighborhoods();
                         // update the list of spinner
                         int i = 0;
                         neighborAsync = new String[allHubs.keySet().size()];
@@ -167,10 +140,11 @@ public class MainActivity extends AppCompatActivity
                             neighborAsync[i++] = name;
                         }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, neighborAsync);
-
-
+                        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, neighborAsync);
                         spinner.setAdapter(adapter);
+                        selectedPosition = mPreferences.getInt("spinnerSelection", 0);
+                        spinner.setSelection(selectedPosition);
+
                         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -179,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
                             @Override
                             public void onNothingSelected(AdapterView<?> parent) {
-
+                                return;
                             }
                         });
                     }
@@ -187,14 +161,13 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                        // setEditingEnabled(true);
-                        // [END_EXCLUDE]
                     }
                 });
         Log.i("****** AllHubs", allHubs.toString());
         return allHubs.keySet();
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -236,14 +209,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
-            Log.i("((((((())))))) Keyset", "" + allHubs.keySet());
 
             Intent intent = new Intent(this, SelectedNeighborhoods.class);
-            //intent.putExtra("transVal", nameTrans);
+
+            // saving the spinner selection in the shared prefferences, unless it is the initial selection
+            selectedPosition = spinner.getSelectedItemPosition();
+            SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+            Toast.makeText(MainActivity.this, neighborAsync[selectedPosition], Toast.LENGTH_LONG).show();
+            preferencesEditor.putInt("spinnerSelection", selectedPosition);
+            preferencesEditor.apply();
+
             Bundle bundle = new Bundle();
             bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
 
@@ -252,9 +231,9 @@ public class MainActivity extends AppCompatActivity
             for (int i = 0; i < sampleHubs.size(); i++) {
                 Log.i(" %%% CH test hubs ", sampleHubs.get(i).getName());
             }
-
             intent.putExtras(bundle);
             startActivity(intent);
+
         } else if (id == R.id.nav_resources) {
             Intent intent = new Intent(MainActivity.this, ResourseActivity.class);
             startActivity(intent);
@@ -286,5 +265,40 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         Log.i("Main activity", "resumed");
+    }
+
+
+    private void buildAllHubs(@NotNull DataSnapshot dataSnapshot) {
+        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
+        allHubs.clear();
+
+        while (hubIterator.hasNext()) {
+            DataSnapshot hoodSnapShot = hubIterator.next();
+            Hub hub = hoodSnapShot.getValue(Hub.class);
+            if (hub != null) {
+                //TODO
+                // write few unit tests to test if all the hubs get in the list
+                if (!allHubs.containsKey(hub.getNeighborhood())) {
+                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
+                    hubsInThisNeighborhood.add(hub);
+                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
+                } else {
+                    if (allHubs.get(hub.getNeighborhood()) != null) {
+                        allHubs.get(hub.getNeighborhood()).add(hub);
+                    }
+                }
+            }
+        }
+    }
+    //TODO
+    // Replace this printout with unit testing
+
+    private void logTheNeighborhoods() {
+        for (Map.Entry<String, ArrayList<Hub>> entry : allHubs.entrySet()) {
+            for (Hub hub : entry.getValue()) {
+                Log.i(" *** Neighborhood " + hub.getNeighborhood(), "~~~ " + hub.getName());
+            }
+        }
+        Log.i("List size", "" + allHubs.keySet().size());
     }
 }

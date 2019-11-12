@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -47,11 +48,14 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.neighborhood_map);
 
         Button firstNeighborhood = (Button) findViewById(R.id.first_neighborhood);
+
         firstNeighborhood.setText(firstSelectedNeighbName);
+
         Button secondNeighborhood = (Button) findViewById(R.id.second_neighborhood);
+        secondNeighborhood.setVisibility(View.GONE);
         Button thirdNeighborhood = (Button) findViewById(R.id.third_neighborhood);
-//        thirdNeighborhood.setVisibility(View.GONE);
-//        secondNeighborhood.setVisibility(View.GONE);
+        thirdNeighborhood.setVisibility(View.GONE);
+
         // add and change neighborhoods button
         FrameLayout editButton = (FrameLayout) findViewById(R.id.Add_edit_button);
         editButton.setOnClickListener(new View.OnClickListener() {

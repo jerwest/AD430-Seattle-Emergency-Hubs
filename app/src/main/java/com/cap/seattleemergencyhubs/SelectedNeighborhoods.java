@@ -71,7 +71,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         // second part - a list view of hubs
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("My Default Neighborhoods");
+        getSupportActionBar().setTitle("MY DEFAULT NEIGHBORHOODS");
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);

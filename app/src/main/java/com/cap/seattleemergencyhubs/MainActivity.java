@@ -3,17 +3,21 @@ package com.cap.seattleemergencyhubs;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.util.Log;
-import android.view.View;
-
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -23,36 +27,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Spinner spinner;
-    private ImageView image;
+    private static final String TAG = "Neighborhoods Activity";
     public String nameTrans;
     public Log mmm;
+    int selectedPosition;
+    private Spinner spinner;
+    private ImageView image;
     private HashMap<String, ArrayList<Hub>> allHubs;
-    private static final String TAG = "Neighborhoods Activity";
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String[] neighborAsync;
@@ -61,55 +51,28 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences lastSelection;
     private String SELECTED_NAME = "selected_neighborhood";
     private boolean initialDisplay = true;
-    int selectedPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        allHubs = new HashMap<>();
-        readHubs();
-        //MARQUEE...
-        TextView txt = findViewById(R.id.text);
-        txt.setSelected(true);
-        //SPINNER...
-
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
+        TextView txt = findViewById(R.id.text);
+        setSupportActionBar(toolbar);
+        allHubs = new HashMap<>();
+
+        retrieveHubsFromFirebase();
+
+        txt.setSelected(true);
+        //SPINNER...
         image.setImageResource(R.drawable.mainmap);
-        //String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
-        Button mButton = (Button) findViewById(R.id.buttonNeigh);
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent trans = new Intent(MainActivity.this, SelectedNeighborhoods.class);
-                trans.putExtra("transValue", nameTrans);
-                startActivity(trans);
-
-                Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY");
-                Log.wtf("myTag", "888888888888888888888888888888" + nameTrans);
-
-                startActivity(trans);
-
-            }
-        });
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Emergenc Hubs Mail", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -117,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public Set<String> readHubs() {
+    public Set<String> retrieveHubsFromFirebase() {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -126,25 +89,16 @@ public class MainActivity extends AppCompatActivity
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        //spinner.setSelection(mPreferences.getInt("spinnerSelection",0));
-
+                        // make sure that clicked item is saved, not the first position when spinner is shown
                         if (!initialDisplay) {
                             spinner.setSelection(selectedPosition);
                         }
                         buildAllHubs(dataSnapshot);
                         logTheNeighborhoods();
                         // update the list of spinner
-                        int i = 0;
-                        neighborAsync = new String[allHubs.keySet().size()];
-                        for (String name : allHubs.keySet()) {
-                            neighborAsync[i++] = name;
-                        }
-
+                        createSpinnerListNamesFromNeighHubsMap(allHubs);
                         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, neighborAsync);
-                        spinner.setAdapter(adapter);
-                        selectedPosition = mPreferences.getInt("spinnerSelection", 0);
-                        spinner.setSelection(selectedPosition);
-
+                        setUpSpinner(adapter);
                         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -168,7 +122,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -178,28 +131,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
 
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -226,11 +157,7 @@ public class MainActivity extends AppCompatActivity
             Bundle bundle = new Bundle();
             bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
 
-            Log.i("** name Trans ", nameTrans);
-            ArrayList<Hub> sampleHubs = allHubs.get(nameTrans);
-            for (int i = 0; i < sampleHubs.size(); i++) {
-                Log.i(" %%% CH test hubs ", sampleHubs.get(i).getName());
-            }
+            logBundleValues();
             intent.putExtras(bundle);
             startActivity(intent);
 
@@ -267,6 +194,7 @@ public class MainActivity extends AppCompatActivity
         Log.i("Main activity", "resumed");
     }
 
+    // ******************* HELPER METHODS **************************
 
     private void buildAllHubs(@NotNull DataSnapshot dataSnapshot) {
         Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
@@ -300,5 +228,29 @@ public class MainActivity extends AppCompatActivity
             }
         }
         Log.i("List size", "" + allHubs.keySet().size());
+    }
+
+    private void createSpinnerListNamesFromNeighHubsMap(HashMap<String, ArrayList<Hub>> map) {
+        int i = 0;
+        neighborAsync = new String[map.keySet().size()];
+        for (String name : map.keySet()) {
+            neighborAsync[i++] = name;
+        }
+    }
+
+    private void setUpSpinner(ArrayAdapter<String> adapter) {
+        spinner.setAdapter(adapter);
+        selectedPosition = mPreferences.getInt("spinnerSelection", 0);
+        spinner.setSelection(selectedPosition);
+    }
+
+    //TODO
+    // Replace this printout with unit testing
+    private void logBundleValues() {
+        Log.i("** name Trans ", nameTrans);
+        ArrayList<Hub> sampleHubs = allHubs.get(nameTrans);
+        for (int i = 0; i < sampleHubs.size(); i++) {
+            Log.i(" %%% CH test hubs ", sampleHubs.get(i).getName());
+        }
     }
 }

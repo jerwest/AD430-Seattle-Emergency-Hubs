@@ -1,18 +1,23 @@
 package com.cap.seattleemergencyhubs;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.util.Log;
-import android.view.View;
-
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -21,162 +26,53 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
-import com.google.protobuf.MapEntryLite;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Spinner spinner;
-    private ImageView image;
+    private static final String TAG = "Neighborhoods Activity";
     public String nameTrans;
     public Log mmm;
-    private HashMap<String, ArrayList<Hub>> allHubs = new HashMap<>();
-    private static final String TAG = "Neighborhoods Activity";
+    int selectedPosition;
+    private Spinner spinner;
+    private ImageView image;
+    private HashMap<String, ArrayList<Hub>> allHubs;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private String[] neighborAsync;
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.cap.seattleemergencyhubs";
+    private SharedPreferences lastSelection;
+    private String SELECTED_NAME = "selected_neighborhood";
+    private boolean initialDisplay = true;
 
-    /*
-    Firebase provides great support when comes to offline data.
-    It automatically stores the data offline when there is no internet connection.
-    When the device connects to internet, all the data will be pushed to realtime database.
-    However enabling disk persistence stores the data offline even though app restarts.
-    Disk persistence can be enabled by calling below one line code.
-    Here is complete guide about firebase offline capabilities.
-
-     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-
-        // building hashmap of hubs from the firebase
-        readHubs();
-
-        //MARQUEE...
-        TextView txt = findViewById(R.id.text);
-        txt.setSelected(true);
-
-        //SPINNER...
-
         spinner = findViewById(R.id.spinner);
         image = findViewById(R.id.hubsmap);
-        String[] neighbor = {"Select", "Ballard", "Capitol Hill", "Downtown/Central", "Fremont", "Green Lake", "Magnolia", "Northwest seattle", "Queen Ann", "South Seattle", "West Seattle", "Crown Hill"};
+        TextView txt = findViewById(R.id.text);
+        setSupportActionBar(toolbar);
+        allHubs = new HashMap<>();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, neighbor);
+        retrieveHubsFromFirebase();
 
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                switch (position) {
-                    case 0:
-                        image.setImageResource(R.drawable.mainmap);
-                        nameTrans = "";
-                        break;
-                    case 1:
-                        image.setImageResource(R.drawable.ballardmap);
-                        nameTrans = "Ballard";
-                        break;
-                    case 2:
-                        image.setImageResource(R.drawable.capitolhillmap);
-                        nameTrans = "Capitol Hill";
-                        break;
-                    case 3:
-                        image.setImageResource(R.drawable.downtowncentralmap);
-                        nameTrans = "Downtown/Central";
-                        break;
-                    case 4:
-                        image.setImageResource(R.drawable.fremontmap);
-                        nameTrans = "Fremont";
-                        break;
-                    case 5:
-                        image.setImageResource(R.drawable.greenlakemap);
-                        nameTrans = "Green Lake";
-                        break;
-                    case 6:
-                        image.setImageResource(R.drawable.magnoliamap);
-                        nameTrans = "Magnolia";
-                        break;
-                    case 7:
-                        image.setImageResource(R.drawable.northwestmap);
-                        nameTrans = "Northwest Seattle";
-                        break;
-                    case 8:
-                        image.setImageResource(R.drawable.queenannmap);
-                        nameTrans = "Quee Ann";
-                        break;
-                    case 9:
-                        image.setImageResource(R.drawable.southseattlemap);
-                        nameTrans = "South Seattle";
-                        break;
-                    case 10:
-                        image.setImageResource(R.drawable.westseattlemap);
-                        nameTrans = "West Seattle";
-                        break;
-                    case 11:
-                        nameTrans = "Crown Hill";
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        Button mButton = (Button) findViewById(R.id.buttonNeigh);
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent trans = new Intent(MainActivity.this, SelectedNeighborhoods.class);
-                trans.putExtra("transValue", nameTrans);
-                startActivity(trans);
-
-                Log.wtf("myTag", "THIS LOG SHOWS VARIABLE BEFORE GOING TO NHUBSACTIVITY");
-                Log.wtf("myTag", "888888888888888888888888888888" + nameTrans);
-
-                startActivity(trans);
-
-            }
-        });
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Emergenc Hubs Mail", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        txt.setSelected(true);
+        //SPINNER...
+        image.setImageResource(R.drawable.mainmap);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -184,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void readHubs() {
+    public Set<String> retrieveHubsFromFirebase() {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -193,44 +89,37 @@ public class MainActivity extends AppCompatActivity
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
-                        allHubs.clear();
+                        // make sure that clicked item is saved, not the first position when spinner is shown
+                        if (!initialDisplay) {
+                            spinner.setSelection(selectedPosition);
+                        }
+                        buildAllHubs(dataSnapshot);
+                        logTheNeighborhoods();
+                        // update the list of spinner
+                        createSpinnerListNamesFromNeighHubsMap(allHubs);
+                        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, neighborAsync);
+                        setUpSpinner(adapter);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                nameTrans = spinner.getSelectedItem().toString();
+                            }
 
-                        while (hubIterator.hasNext()) {
-                            DataSnapshot hoodSnapShot = hubIterator.next();
-                            Hub hub = hoodSnapShot.getValue(Hub.class);
-                            if (hub != null) {
-                                //TODO
-                                // write few unit tests to test if all the hubs get in the list
-                                if (!allHubs.containsKey(hub.getNeighborhood())) {
-                                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
-                                    hubsInThisNeighborhood.add(hub);
-                                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
-                                } else {
-                                    if (allHubs.get(hub.getNeighborhood()) != null) {
-                                        allHubs.get(hub.getNeighborhood()).add(hub);
-                                    }
-                                }
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                return;
                             }
-                        }
-                        // TESTING MAP CONTENTS - NEEDS TO BE SWITCHED TO THE UNIT TEST
-                        for (Map.Entry<String, ArrayList<Hub>> entry : allHubs.entrySet()) {
-                            for (Hub hub : entry.getValue()) {
-                                Log.i(" *** Neighborhood " + hub.getNeighborhood(), "~~~ " + hub.getName());
-                            }
-                        }
-                        Log.i("List size", "" + allHubs.keySet().size());
-                        // finish();
+                        });
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                        // setEditingEnabled(true);
-                        // [END_EXCLUDE]
                     }
                 });
+        Log.i("****** AllHubs", allHubs.toString());
+        return allHubs.keySet();
+
     }
 
     @Override
@@ -244,28 +133,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -273,24 +140,27 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_neighborhood) {
 
             Intent intent = new Intent(this, SelectedNeighborhoods.class);
-            //intent.putExtra("transVal", nameTrans);
+
+            // saving the spinner selection in the shared prefferences, unless it is the initial selection
+            selectedPosition = spinner.getSelectedItemPosition();
+            SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+            Toast.makeText(MainActivity.this, neighborAsync[selectedPosition], Toast.LENGTH_LONG).show();
+            preferencesEditor.putInt("spinnerSelection", selectedPosition);
+            preferencesEditor.apply();
+
             Bundle bundle = new Bundle();
             bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
 
-            Log.i("** name Trans ", nameTrans);
-            ArrayList<Hub> crownHillHubs = allHubs.get(nameTrans);
-            for(int i = 0; i< crownHillHubs.size(); i++){
-                Log.i(" %%% CH test hubs ", crownHillHubs.get(0).getName());
-            }
-
+            logBundleValues();
             intent.putExtras(bundle);
             startActivity(intent);
+
         } else if (id == R.id.nav_resources) {
             Intent intent = new Intent(MainActivity.this, ResourseActivity.class);
             startActivity(intent);
@@ -315,12 +185,72 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("Main activity", "passed");
+        Log.i("Main activity", "paused");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.i("Main activity", "resumed");
+    }
+
+    // ******************* HELPER METHODS **************************
+
+    private void buildAllHubs(@NotNull DataSnapshot dataSnapshot) {
+        Iterator<DataSnapshot> hubIterator = dataSnapshot.getChildren().iterator();
+        allHubs.clear();
+
+        while (hubIterator.hasNext()) {
+            DataSnapshot hoodSnapShot = hubIterator.next();
+            Hub hub = hoodSnapShot.getValue(Hub.class);
+            if (hub != null) {
+                //TODO
+                // write few unit tests to test if all the hubs get in the list
+                if (!allHubs.containsKey(hub.getNeighborhood())) {
+                    ArrayList<Hub> hubsInThisNeighborhood = new ArrayList<>();
+                    hubsInThisNeighborhood.add(hub);
+                    allHubs.put(hub.getNeighborhood(), hubsInThisNeighborhood);
+                } else {
+                    if (allHubs.get(hub.getNeighborhood()) != null) {
+                        allHubs.get(hub.getNeighborhood()).add(hub);
+                    }
+                }
+            }
+        }
+    }
+    //TODO
+    // Replace this printout with unit testing
+
+    private void logTheNeighborhoods() {
+        for (Map.Entry<String, ArrayList<Hub>> entry : allHubs.entrySet()) {
+            for (Hub hub : entry.getValue()) {
+                Log.i(" *** Neighborhood " + hub.getNeighborhood(), "~~~ " + hub.getName());
+            }
+        }
+        Log.i("List size", "" + allHubs.keySet().size());
+    }
+
+    private void createSpinnerListNamesFromNeighHubsMap(HashMap<String, ArrayList<Hub>> map) {
+        int i = 0;
+        neighborAsync = new String[map.keySet().size()];
+        for (String name : map.keySet()) {
+            neighborAsync[i++] = name;
+        }
+    }
+
+    private void setUpSpinner(ArrayAdapter<String> adapter) {
+        spinner.setAdapter(adapter);
+        selectedPosition = mPreferences.getInt("spinnerSelection", 0);
+        spinner.setSelection(selectedPosition);
+    }
+
+    //TODO
+    // Replace this printout with unit testing
+    private void logBundleValues() {
+        Log.i("** name Trans ", nameTrans);
+        ArrayList<Hub> sampleHubs = allHubs.get(nameTrans);
+        for (int i = 0; i < sampleHubs.size(); i++) {
+            Log.i(" %%% CH test hubs ", sampleHubs.get(i).getName());
+        }
     }
 }

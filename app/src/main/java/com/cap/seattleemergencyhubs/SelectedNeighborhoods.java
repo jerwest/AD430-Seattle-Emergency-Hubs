@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +15,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         if (bundle != null) {
 
             currentNeighborhoodHubs = (ArrayList<Hub>) bundle.getSerializable("neighborhoodName");
-            Log.i("ArrayList ", currentNeighborhoodHubs.toArray().toString() );
+            Log.i("ArrayList ", currentNeighborhoodHubs.toArray().toString());
             if (currentNeighborhoodHubs != null) {
                 firstSelectedNeighbName = currentNeighborhoodHubs.get(0).getNeighborhood().toUpperCase();
                 Log.i(" *** Current hubs list ", firstSelectedNeighbName);
@@ -47,27 +46,28 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.neighborhood_map);
 
         Button firstNeighborhood = (Button) findViewById(R.id.first_neighborhood);
+
         firstNeighborhood.setText(firstSelectedNeighbName);
+
         Button secondNeighborhood = (Button) findViewById(R.id.second_neighborhood);
+        secondNeighborhood.setVisibility(View.GONE);
         Button thirdNeighborhood = (Button) findViewById(R.id.third_neighborhood);
-//        thirdNeighborhood.setVisibility(View.GONE);
-//        secondNeighborhood.setVisibility(View.GONE);
+        thirdNeighborhood.setVisibility(View.GONE);
+
         // add and change neighborhoods button
         FrameLayout editButton = (FrameLayout) findViewById(R.id.Add_edit_button);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SelectedNeighborhoods.this, MainActivity.class);
-                //TODO
-                //put the currently selected neigborhood into the intent
-                // when moving to the previouse activity - keep it's name in the selection
+
                 startActivity(intent);
             }
         });
         // second part - a list view of hubs
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("My Default Neighborhoods");
+        getSupportActionBar().setTitle("MY DEFAULT NEIGHBORHOODS");
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);

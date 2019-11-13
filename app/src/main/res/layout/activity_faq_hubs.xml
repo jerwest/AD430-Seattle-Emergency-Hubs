@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF9052"
+    tools:context=".FaqHUBS">
+
+    <TextView
+        android:id="@+id/FAQHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="36dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="Frequent Asked Questions"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/QuestionOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="114dp"
+        android:text="Question Number One Goes Here...."
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/QuestionTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="175dp"
+        android:text="Question Number Two Goes Here...."
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/QuestionThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="237dp"
+        android:text="Question Number Three Goes Here...."
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/QuestionFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="300dp"
+        android:text="Question Number Four Goes Here...."
+        android:textSize="24sp" />
+
+
+
+</RelativeLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "589234990401",
+    "firebase_url": "https://sehmobileapp.firebaseio.com",
+    "project_id": "sehmobileapp",
+    "storage_bucket": "sehmobileapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589234990401:android:1d156709651f94a41c45c0",
+        "android_client_info": {
+          "package_name": "com.cap.seattleemergencyhubs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589234990401-t6tbj7l8ugr3pknbgvkmroioitufjsmh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFnQJMJpxw7ITBW5NhZpyedLtHI2GlTdY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589234990401-t6tbj7l8ugr3pknbgvkmroioitufjsmh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

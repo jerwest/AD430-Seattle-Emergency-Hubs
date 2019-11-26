@@ -93,5 +93,4 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner"
         tools:srcCompat="@tools:sample/avatars" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

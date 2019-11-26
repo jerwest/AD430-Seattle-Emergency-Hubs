@@ -1,21 +1,33 @@
 package com.cap.seattleemergencyhubs;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -43,7 +55,30 @@ public class SelectedNeighborhoods extends AppCompatActivity {
             }
         }
 
-        ImageView imageView = findViewById(R.id.neighborhood_map);
+        // ------- map image-------
+        //TODO
+        // Set up cashing and unable offline view
+         final ImageView imageView = findViewById(R.id.neighborhood_map);
+        // get a imageUrl from Firebase storage or Google Drive
+
+
+            StorageReference storageRef = FirebaseStorage.getInstance()
+                    .getReference().child("fremontmap.JPG");
+
+            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                   //TODO
+                    //curently failure to load the url
+                    Picasso.get().load(uri).into(imageView);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                  //TODO
+                    Toast.makeText(SelectedNeighborhoods.this, "Didn't load URL", Toast.LENGTH_LONG).show();
+                }
+            });
 
         Button firstNeighborhood = (Button) findViewById(R.id.first_neighborhood);
 
@@ -99,4 +134,55 @@ public class SelectedNeighborhoods extends AppCompatActivity {
     public void onResume() {
         super.onResume();
     }
+
+
+    //-------------------- PICASSO AND FIREBASE STORAGE STUFF------------------
+    //----------------Creating custom RecyclerView Adapter--------------------------
+
+
+
+
+               // mapLabel = v.findViewById(R.id.description);
+
+    //-----------------Checking connection-------------------------
+
+//    public boolean checkNetworkConnections() {
+//        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//
+//        if (networkInfo != null && networkInfo.isConnected()) {
+//
+//            //different types of connection
+//
+//            WIFIconnected = networkInfo.getType() == connectivityManager.TYPE_WIFI;
+//            mobileConnected = networkInfo.getType() == connectivityManager.TYPE_MOBILE;
+//            if (WIFIconnected) {
+//                Log.i("WIFI connected", "successfully");
+//                return true;
+//            } else if (mobileConnected) {
+//                Log.i("Mobile connected ", "successfuly");
+//                return true;
+//            }
+//        } else {
+//            Log.i("Connection status ", "No connection");
+//            return false;
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * Get's traffic cameras
+//     *
+//     * @return The list of traffic cameral objects
+//     */
+//    public void getCameras(){
+//
+//        Intent intent = new Intent(CameraActivity.this, MapsActivity.class);
+//        Gson gson = new Gson();
+//        String jsonCams = gson.toJson(cams);
+//        intent.putExtra("cameras_as_string", jsonCams);
+//        startActivity(intent);
+//    }
+
+
 }

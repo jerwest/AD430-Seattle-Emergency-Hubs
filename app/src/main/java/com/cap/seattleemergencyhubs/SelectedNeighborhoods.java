@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -58,27 +59,28 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         // ------- map image-------
         //TODO
         // Set up cashing and unable offline view
-         final ImageView imageView = findViewById(R.id.neighborhood_map);
+        final ImageView imageView = findViewById(R.id.neighborhood_map);
         // get a imageUrl from Firebase storage or Google Drive
 
 
-            StorageReference storageRef = FirebaseStorage.getInstance()
-                    .getReference().child("fremontmap.JPG");
+        StorageReference storageRef = FirebaseStorage.getInstance()
+                .getReference().child("fremontmap.JPG");
 
-            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                   //TODO
-                    //curently failure to load the url
-                    Picasso.get().load(uri).into(imageView);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                  //TODO
-                    Toast.makeText(SelectedNeighborhoods.this, "Didn't load URL", Toast.LENGTH_LONG).show();
-                }
-            });
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //TODO
+                //create a static class
+                Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).
+                        into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //TODO
+                Toast.makeText(SelectedNeighborhoods.this, "Didn't load URL", Toast.LENGTH_LONG).show();
+            }
+        });
 
         Button firstNeighborhood = (Button) findViewById(R.id.first_neighborhood);
 
@@ -136,14 +138,6 @@ public class SelectedNeighborhoods extends AppCompatActivity {
     }
 
 
-    //-------------------- PICASSO AND FIREBASE STORAGE STUFF------------------
-    //----------------Creating custom RecyclerView Adapter--------------------------
-
-
-
-
-               // mapLabel = v.findViewById(R.id.description);
-
     //-----------------Checking connection-------------------------
 
 //    public boolean checkNetworkConnections() {
@@ -170,19 +164,6 @@ public class SelectedNeighborhoods extends AppCompatActivity {
 //        return false;
 //    }
 //
-//    /**
-//     * Get's traffic cameras
-//     *
-//     * @return The list of traffic cameral objects
-//     */
-//    public void getCameras(){
-//
-//        Intent intent = new Intent(CameraActivity.this, MapsActivity.class);
-//        Gson gson = new Gson();
-//        String jsonCams = gson.toJson(cams);
-//        intent.putExtra("cameras_as_string", jsonCams);
-//        startActivity(intent);
-//    }
 
 
 }

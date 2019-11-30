@@ -71,7 +71,7 @@ public class SelectedNeighborhoods extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 //TODO
                 //create a static class
-                Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).
+                Picasso.get().load(uri).//networkPolicy(NetworkPolicy.OFFLINE).
                         into(imageView);
             }
         }).addOnFailureListener(new OnFailureListener() {

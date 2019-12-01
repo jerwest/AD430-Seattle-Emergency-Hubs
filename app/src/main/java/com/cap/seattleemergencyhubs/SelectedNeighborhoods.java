@@ -18,25 +18,60 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import android.content.Context;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.view.LayoutInflater;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
+
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
 
 import java.util.ArrayList;
 
 public class SelectedNeighborhoods extends AppCompatActivity {
 
+
+
     private ArrayList<Hub> currentNeighborhoodHubs = new ArrayList<>();
     private static final String TAG = "Neighborhoods Activity";
     private String firstSelectedNeighbName;
+    Button popUpMapLegendButton, closePopupBtn;
+    PopupWindow popupWindow;
+    ScrollView linearLayout1;
+
+    ListView list;
+    String[] itemname ={
+            "Emergency Hub",
+            "Non-Emergency Hub",
+            "Block Watch",
+            "SNAP",
+            "CERT",
+            "MYN"
+    };
+
+    Integer[] imgid={
+            R.drawable.emer_hub_icon,
+            R.drawable.non_emer_icon,
+            R.drawable.block_watch_icon,
+            R.drawable.snap_icon,
+            R.drawable.cert_icon,
+            R.drawable.myn_icon
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +154,54 @@ public class SelectedNeighborhoods extends AppCompatActivity {
         ColorDrawable separator = new ColorDrawable(this.getResources().getColor(R.color.lightGreen));
         listView.setDivider(separator);
         listView.setDividerHeight(10);
+
+
+        CustomListAdapter adapter2=new CustomListAdapter(this, itemname, imgid);
+        list=(ListView)findViewById(R.id.list);
+        list.setAdapter(adapter2);
+
+        list.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                String Slecteditem= itemname[+position];
+                Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+//        popUpMapLegendButton = (Button) findViewById(R.id.popUpMapLegendButton);
+//        linearLayout1 = (ScrollView) findViewById(R.id.ScrollView01);
+//
+//        popUpMapLegendButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //instantiate the popup.xml layout file
+//                LayoutInflater layoutInflater = (LayoutInflater) SelectedNeighborhoods.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                View customView = layoutInflater.inflate(R.layout.map_legend,null);
+//
+//                closePopupBtn = (Button) customView.findViewById(R.id.closePopupBtn);
+//
+//                //instantiate popup window
+//                popupWindow = new PopupWindow(customView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//
+//                //display the popup window
+//                popupWindow.showAtLocation(linearLayout1, Gravity.CENTER, 0, 0);
+//
+//                //close the popup window on button click
+//                closePopupBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindow.dismiss();
+//                    }
+//                });
+//
+//            }
+//        });
+
 
     }
 

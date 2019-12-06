@@ -80,26 +80,26 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void onButtonClick(View v){
-        Intent myIntent = new Intent(getBaseContext(),   SelectedNeighborhoods.class);
-        startActivity(myIntent);
-        Intent intent = new Intent(this, SelectedNeighborhoods.class);
+    public void onButtonClick(View v){	
+        Intent myIntent = new Intent(getBaseContext(),   SelectedNeighborhoods.class);	
+        startActivity(myIntent);	
+        Intent intent = new Intent(this, SelectedNeighborhoods.class);	
 
-        // saving the spinner selection in the shared prefferences, unless it is the initial selection
-        selectedPosition = spinner.getSelectedItemPosition();
-        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
-        Toast.makeText(MainActivity.this, neighborAsync[selectedPosition], Toast.LENGTH_LONG).show();
-        preferencesEditor.putInt("spinnerSelection", selectedPosition);
-        preferencesEditor.apply();
+        // saving the spinner selection in the shared prefferences, unless it is the initial selection	
+        selectedPosition = spinner.getSelectedItemPosition();	
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();	
+        Toast.makeText(MainActivity.this, neighborAsync[selectedPosition], Toast.LENGTH_LONG).show();	
+        preferencesEditor.putInt("spinnerSelection", selectedPosition);	
+        preferencesEditor.apply();	
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));
+        Bundle bundle = new Bundle();	
+        bundle.putSerializable("neighborhoodName", allHubs.get(nameTrans));	
 
-        logBundleValues();
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
+        logBundleValues();	
+        intent.putExtras(bundle);	
+        startActivity(intent);	
+    }	
+    
     public Set<String> retrieveHubsFromFirebase() {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
@@ -163,6 +163,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_about) {
 
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+
+            startActivity(intent);
+
         } else if (id == R.id.nav_neighborhood) {
 
             Intent intent = new Intent(this, SelectedNeighborhoods.class);
@@ -187,7 +191,13 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_blog) {
 
+
+
         } else if (id == R.id.nav_contact) {
+            Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+            startActivity(intent);
+
+
 
         }
 

@@ -17,4 +17,5 @@
     <string name="title_activity_resourses">Seattle Emergency Hubs</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="title_activity_resourse">ResourseActivity</string>
+    <string name="title_activity_abouts">AboutActivity</string>
 </resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".AboutsActivity"
+    tools:showIn="@layout/activity_abouts">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="344dp"
+        android:layout_height="586dp"
+        android:layout_marginStart="74dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="74dp"
+        android:gravity="center"
+        android:text="HUB MISSION STATEMENT\n
+
+A Seattle Community Emergency Hub is a pre-determined location where neighbors and community members are likely to gather to begin exchanging information and resources among themselves without outside assistance from City services.
+A Seattle Emergency Communications Hub is an enhanced Community Emergency Hub. It has a core of trained volunteers with additional skills who can collect information on local situations, needs, and resources and assist in the allocation of resources to needs. They can relay information between Hubs, the Auxiliary Communications Service, or other locations so that it reaches those in need. Hub volunteers also aid the City of Seattle in encouraging neighbors to be individually and collectively prepared for a disaster."
+
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

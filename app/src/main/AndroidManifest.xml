@@ -18,11 +18,21 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_abouts"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ResourseActivity"
-            android:label="@string/title_activity_resourse"
+        android:name=".ResourseActivity"
+        android:label="@string/title_activity_resourse"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AnnouncementsActivity"
+            android:label="Announcements"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AnnouncementDetailsActivity"
+            android:label="Announcement Details"
+            android:parentActivityName=".AnnouncementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"

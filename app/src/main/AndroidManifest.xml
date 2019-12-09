@@ -35,6 +35,11 @@
             android:label="@string/title_selected_neighborhoods"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FaqMain"
+            android:label="FaqMain"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

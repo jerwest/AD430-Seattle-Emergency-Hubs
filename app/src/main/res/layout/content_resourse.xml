@@ -13,9 +13,12 @@
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
-        android:textSize="25dp"
-        android:text="Planning Tips"
+        android:background="#2A2B33"
+        android:fontFamily="@font/roboto"
         android:onClick="buttonOnClick"
+        android:text="Planning Tips"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/createHubBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -27,70 +30,85 @@
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
+        android:background="#2A2B33"
         android:textSize="25dp"
         android:text="How To Create a Hub"
+        android:textColor="#FFFFFF"
         android:onClick="buttonOnClick"
         app:layout_constraintBottom_toTopOf="@+id/firstAidBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planningBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/planningBtn"
+        android:fontFamily="@font/roboto"/>
 
     <Button
         android:id="@+id/firstAidBtn"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
+        android:background="#2A2B33"
         android:textSize="25dp"
         android:text="Medical and First Aid"
+        android:textColor="#FFFFFF"
         android:onClick="buttonOnClick"
         app:layout_constraintBottom_toTopOf="@+id/safetyBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createHubBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/createHubBtn"
+        android:fontFamily="@font/roboto"/>
 
     <Button
         android:id="@+id/safetyBtn"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
+        android:background="#2A2B33"
         android:textSize="25dp"
         android:text="Safety Tips"
+        android:textColor="#FFFFFF"
         android:onClick="buttonOnClick"
         app:layout_constraintBottom_toTopOf="@+id/trainningBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstAidBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/firstAidBtn"
+        android:fontFamily="@font/roboto"/>
 
     <Button
         android:id="@+id/trainningBtn"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
+        android:background="#2A2B33"
         android:textSize="25dp"
         android:text="Trainning and Education"
+        android:textColor="#FFFFFF"
         android:onClick="buttonOnClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/safetyBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/safetyBtn"
+        android:fontFamily="@font/roboto"/>
 
     <Button
         android:id="@+id/urbSurvBtn"
         android:layout_width="409dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
+        android:background="#2A2B33"
         android:textSize="25dp"
         android:text="Urban Survival Skills"
+        android:textColor="#FFFFFF"
         android:onClick="buttonOnClick"
         app:layout_constraintBottom_toTopOf="@+id/planningBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textResSkills" />
+        app:layout_constraintTop_toBottomOf="@+id/textResSkills"
+        android:fontFamily="@font/roboto"/>
 
     <TextView
         android:id="@+id/textResSkills"
@@ -98,9 +116,11 @@
         android:layout_height="0dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
+        android:fontFamily="@font/roboto_medium"
         android:gravity="center"
-        android:textSize="40dp"
         android:text="RESOURCES SKILLS"
+        android:textColor="#464956"
+        android:textSize="40dp"
         app:layout_constraintBottom_toTopOf="@+id/urbSurvBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

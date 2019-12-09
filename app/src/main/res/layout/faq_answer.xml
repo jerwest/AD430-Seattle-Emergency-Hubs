@@ -6,12 +6,14 @@
 
 
     <TextView
+        android:id="@+id/descriptionFaqView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/descriptionFaqView"
+        android:background="#FFFFFF"
+        android:fontFamily="@font/roboto_light"
         android:padding="5dp"
         android:text="Description View"
-        android:textSize="18sp"/>
+        android:textSize="20sp" />
 
 
 </LinearLayout>

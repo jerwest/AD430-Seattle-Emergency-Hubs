@@ -35,9 +35,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
-        android:singleLine="false"
+        android:background="#F09956"
 
-        android:text="Step #1 - Choose Neighborhood"
+        android:fontFamily="@font/roboto"
+        android:singleLine="false"
+        android:text="Step 1 - Choose Neighborhood"
+        android:textColor="#FFFFFF"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,12 +56,13 @@
         android:layout_marginBottom="8dp"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
+        android:fontFamily="@font/roboto_light"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:text="Save the date – 2019 City wide Hub Field Exercise – Saturday, June 1, 9:00 to noon"
         android:textAlignment="center"
-        android:textColor="#ff4500"
+        android:textColor="#FF9402"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonNeigh"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,12 +102,15 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="STEP #2 - CLICK HERE"
+        android:background="#F09956"
+        android:fontFamily="@font/roboto"
+        android:onClick="onButtonClick"
+        android:text="STEP 2 - CLICK HERE"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hubsmap"
-        android:onClick="onButtonClick"/>
+        app:layout_constraintTop_toBottomOf="@+id/hubsmap" />
 
 
 

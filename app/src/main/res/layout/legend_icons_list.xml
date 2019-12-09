@@ -18,17 +18,20 @@
             android:id="@+id/item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto"
             android:padding="2dp"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000" />
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/roboto"
+            android:text="TextView" />
     </LinearLayout>
 </LinearLayout>

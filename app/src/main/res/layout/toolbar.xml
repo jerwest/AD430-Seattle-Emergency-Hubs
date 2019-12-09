@@ -8,8 +8,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="@android:color/background_light"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:background="#F09956"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextColor="@android:color/background_light" />
 
 </com.google.android.material.appbar.AppBarLayout>

@@ -34,7 +34,8 @@
             android:layout_height="39dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:background="@color/redish"
+            android:background="#F09956"
+            android:fontFamily="@font/roboto_medium"
             android:text="@string/title_selected_neighborhoods"
             android:textColor="@android:color/background_light"
             app:layout_constraintStart_toStartOf="@id/toolbar"
@@ -47,7 +48,10 @@
 
             android:layout_marginStart="13dp"
             android:layout_marginTop="16dp"
+            android:background="#F09956"
+            android:fontFamily="@font/roboto_light"
             android:text="Neighborhood 2"
+            android:textColor="#FFFFFF"
             app:layout_constraintStart_toEndOf="@+id/first_neighborhood"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -59,7 +63,10 @@
             android:layout_marginTop="16dp"
 
             android:layout_marginEnd="20dp"
+            android:background="#F09956"
+            android:fontFamily="@font/roboto_light"
             android:text="Neighborhood 3"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -96,8 +103,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginLeft="50dp"
+                android:fontFamily="@font/roboto_light"
                 android:singleLine="false"
                 android:text="Add/ \nChange"
+                android:textColor="#3A3636"
                 android:textSize="16dp" />
         </FrameLayout>
 
@@ -146,9 +155,9 @@
             android:layout_height="32dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-black"
+            android:fontFamily="@font/roboto_bold"
             android:text="Map Legend"
-            android:textColor="@android:color/black"
+            android:textColor="#3C3838"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/list"
             app:layout_constraintEnd_toEndOf="parent"

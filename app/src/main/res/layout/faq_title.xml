@@ -6,17 +6,18 @@
     android:padding="5dp">
 
     <TextView
+        android:id="@+id/faqTitleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/faqTitleView"
-        android:paddingLeft="?android:expandableListPreferredChildPaddingLeft"
-        android:paddingStart="?android:expandableListPreferredChildPaddingLeft"
+        android:background="#f09956"
+        android:fontFamily="@font/roboto"
         android:minHeight="40dp"
+        android:paddingStart="?android:expandableListPreferredChildPaddingLeft"
+        android:paddingLeft="?android:expandableListPreferredChildPaddingLeft"
         android:text="Title Goes Here"
-        android:background="@color/lightorange"
-        android:textSize="20sp"
         android:textAlignment="center"
-        />
+        android:textColor="#FFFFFF"
+        android:textSize="25sp" />
 
 
 </LinearLayout>

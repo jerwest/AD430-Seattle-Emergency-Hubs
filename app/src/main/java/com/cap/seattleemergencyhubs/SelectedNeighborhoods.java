@@ -56,8 +56,8 @@ public class SelectedNeighborhoods extends AppCompatActivity {
 
     ListView list;
     String[] itemname ={
-            "Emergency Communication Hub",
-            "Emergency Hub",
+            "Communication Hub",
+            "Hub",
             "Block Watch",
             "SNAP",
             "CERT",
